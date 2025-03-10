@@ -182,7 +182,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 3468101}
-    PlayerPrefab: {fileID: 0}
+    PlayerPrefab: {fileID: 7216047633976425198, guid: a1b322bff0830404eb56c585b5d8143e, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: a9d1c135281555f4f9000e42972e7f51, type: 2}
@@ -1208,7 +1208,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5974986913380012265, guid: d8cf39e351e7c82408a1ea1822811ad9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.422
+      value: 7.3
       objectReference: {fileID: 0}
     - target: {fileID: 5974986913380012265, guid: d8cf39e351e7c82408a1ea1822811ad9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2665,11 +2665,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9426972c937cb143ad20aa7c942bcb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userSpawnInfo: {fileID: 11400000, guid: a778df6808f49064f9eb2e51ea7630e2, type: 2}
+  userSpawnInfo: {fileID: 11400000, guid: 66b46f2c1d2b6bf49a0fb472ee4f5842, type: 2}
   startDedicatedServer: 0
   dedicatedServerSettings: {fileID: 11400000, guid: c7cb59b12ddfb0d42ba4f8c9a3df914c, type: 2}
   lobbySettings: {fileID: 11400000, guid: 0cccc57bb13e3c24ba86f6a18952ba72, type: 2}
-  verbose: 1
+  verbose: 0
   onAuthenticated:
     m_PersistentCalls:
       m_Calls: []
@@ -7309,7 +7309,7 @@ PrefabInstance:
       addedObject: {fileID: 1906134401}
     - targetCorrespondingSourceObject: {fileID: 3828846876288801734, guid: 1c6865324f95c004293d5d1efe86d559, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1906134402}
+      addedObject: {fileID: 1906134406}
   m_SourcePrefab: {fileID: 100100000, guid: 1c6865324f95c004293d5d1efe86d559, type: 3}
 --- !u!4 &1906134397 stripped
 Transform:
@@ -7343,7 +7343,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1906134402
+--- !u!114 &1906134406
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7352,7 +7352,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 216228805}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a5f54f871b2be243a75ae21143cf0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
