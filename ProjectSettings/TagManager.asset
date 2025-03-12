@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Peer
+  - Pan
+  - Pumpkin
   layers:
   - Default
   - TransparentFX
@@ -12,13 +14,13 @@ TagManager:
   - CameraIgnore
   - Water
   - UI
-  - Ground
+  - Table
   - 
   - 
   - 
   - 
-  - 
-  - 
+  - Interactable
+  - HandCollider
   - 
   - 
   - 

@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class VirtualHand : MonoBehaviour
+public class VirtualHands : MonoBehaviour
 {
     #region Enum
 

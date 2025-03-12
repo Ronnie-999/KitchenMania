@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class HandCollision : MonoBehaviour
+public class HandColliders : MonoBehaviour
 {
     #region Member Variables
 

@@ -39,7 +39,7 @@ public class ContinuousMovement : MonoBehaviour
         Vector3 right = headTransform.right;
 
         // Flatten them to prevent movement in the Y-axis (prevent flying up/down)
-        forward.y = 0;
+        forward.y = 1;
         right.y = 0;
         forward.Normalize();
         right.Normalize();
