@@ -1162,6 +1162,7 @@ GameObject:
   - component: {fileID: 330332250}
   - component: {fileID: 330332251}
   - component: {fileID: 330332252}
+  - component: {fileID: 330332253}
   m_Layer: 0
   m_Name: Rat1
   m_TagString: Untagged
@@ -1239,8 +1240,20 @@ MonoBehaviour:
   movementTargets: []
   randomizeTargetOrder: 1
   minTargetDistance: 1.5
-  movementSpeed: 3
+  movementSpeed: 0.1
   rotationSpeed: 180
+--- !u!114 &330332253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330332248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db78bb9ab5523de4ab6de24d3929e38e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &346740671
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1852,7 +1865,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8404079163817201620, guid: b3c01bafbe9c8fa4fbd4cd93e0eaad44, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1651691104}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4241873536660668843, guid: b3c01bafbe9c8fa4fbd4cd93e0eaad44, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 568041181}
   m_SourcePrefab: {fileID: 100100000, guid: b3c01bafbe9c8fa4fbd4cd93e0eaad44, type: 3}
 --- !u!1001 &520703185
 PrefabInstance:
@@ -2286,6 +2302,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4734119804863508, guid: ff9e9426591275d4cb0bb08488da2542, type: 3}
   m_PrefabInstance: {fileID: 553439286}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &568041177 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4241873536660668843, guid: b3c01bafbe9c8fa4fbd4cd93e0eaad44, type: 3}
+  m_PrefabInstance: {fileID: 515446548}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &568041181
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 568041177}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 14.703787, y: 0.4332295, z: 14.195926}
+  m_Center: {x: 0.019613743, y: 0, z: 0.0035514832}
 --- !u!1 &594114196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2731,9 +2773,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &787414507
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3102,7 +3144,7 @@ Transform:
   m_GameObject: {fileID: 951861377}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.71, y: -3.56, z: 9.66}
+  m_LocalPosition: {x: -0.71, y: -3.56, z: 6.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6092,6 +6134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1685839672}
+  - component: {fileID: 1685839673}
   m_Layer: 0
   m_Name: Furnitures
   m_TagString: Untagged
@@ -6176,6 +6219,27 @@ Transform:
   - {fileID: 833578594}
   m_Father: {fileID: 1979853797}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1685839673
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685839671}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1704912396
 GameObject:
   m_ObjectHideFlags: 0
@@ -7269,6 +7333,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2018565382697658929, guid: dc8351168134a2044aa15e134a0699ff, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2018565382697658929, guid: dc8351168134a2044aa15e134a0699ff, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2018565382697658929, guid: dc8351168134a2044aa15e134a0699ff, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2018565382697658929, guid: dc8351168134a2044aa15e134a0699ff, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.04

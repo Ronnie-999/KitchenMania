@@ -45,23 +45,26 @@ public class ObjectAccessHandler : NetworkBehaviour
     #region RPCs
 
     [Rpc(SendTo.Server)]
-    private void GrabObjectRpc(ulong clientId)
+private void GrabObjectRpc(ulong clientId)
+{
+    if (!IsSpawned || isGrabbed.Value)
     {
-        if (!IsSpawned)
-        {
-            Debug.LogError($"[{name}] GrabObjectRpc failed: Object is not spawned!");
-            return;
-        }
-
-        if (GetComponent<NetworkObject>() == null)
-        {
-            Debug.LogError($"[{name}] GrabObjectRpc failed: NetworkObject is missing!");
-            return;
-        }
-
-        isGrabbed.Value = true;
-        GetComponent<NetworkObject>().ChangeOwnership(clientId);
+        Debug.LogError($"[{name}] GrabObjectRpc failed: Object is either not spawned or already grabbed.");
+        return;
     }
+
+    NetworkObject netObj = GetComponent<NetworkObject>();
+    if (netObj == null)
+    {
+        Debug.LogError($"[{name}] GrabObjectRpc failed: NetworkObject is missing!");
+        return;
+    }
+
+    // Change ownership before marking as grabbed
+    netObj.ChangeOwnership(clientId);
+    isGrabbed.Value = true;
+}
+
 
     [Rpc(SendTo.Server)]
     private void ReleaseObjectRpc()

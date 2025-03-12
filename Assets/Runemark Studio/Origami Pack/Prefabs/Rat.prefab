@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 23840011653650778}
   - component: {fileID: 307693601993197895}
   - component: {fileID: 2863987185345114217}
+  - component: {fileID: 4039936481366401718}
   m_Layer: 0
   m_Name: Rat
   m_TagString: Untagged
@@ -121,5 +122,26 @@ MonoBehaviour:
   movementTargets: []
   randomizeTargetOrder: 1
   minTargetDistance: 0.5
-  movementSpeed: 3
+  movementSpeed: 1
   rotationSpeed: 180
+--- !u!65 &4039936481366401718
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675308188217246}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.381468, y: 0.747867, z: 0.289243}
+  m_Center: {x: -0.17627802, y: 0.37897152, z: 0}

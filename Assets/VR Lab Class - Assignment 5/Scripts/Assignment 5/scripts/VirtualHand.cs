@@ -1,6 +1,8 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
+
 
 public class VirtualHand : MonoBehaviour
 {
@@ -104,142 +106,81 @@ public class VirtualHand : MonoBehaviour
 
     #region Custom Methods
 
-    private void SnapGrab()
+private void SnapGrab()
+{
+    if (grabAction.action.IsPressed())  // Keep checking while button is held
     {
-        if (grabAction.action.IsPressed())
+        if (grabbedObject == null && canGrab)
         {
-            if (grabbedObject == null && canGrab)
+            grabbedObject = handCollider.collidingObject;
+
+            if (grabbedObject != null && grabbedObject.CompareTag("Pan"))
             {
-                grabbedObject = handCollider.collidingObject;
-
-                // Spawn new Pan if grabbing a Pan
-                /*PanSpawner spawner = FindObjectOfType<PanSpawner>();
-                if (spawner != null && grabbedObject.CompareTag("Pan"))
+                PanSpawner[] allSpawners = FindObjectsOfType<PanSpawner>();
+                if (allSpawners.Length > 0)
                 {
-                    spawner.SpawnNewPan();
+                    PanSpawner nearestSpawner = allSpawners.OrderBy(s => Vector3.Distance(s.transform.position, grabbedObject.transform.position)).FirstOrDefault();
+                    nearestSpawner?.SpawnNewPan();
                 }
-                */
-                if (grabbedObject != null && grabbedObject.CompareTag("Pan"))
+            }
+
+            if (grabbedObject != null && grabbedObject.CompareTag("Pumpkin"))
+            {
+                PumpkinSpawner[] allSpawners = FindObjectsOfType<PumpkinSpawner>();
+                if (allSpawners.Length > 0)
                 {
-                    // Find all PanSpawner in the scene
-                    PanSpawner[] allSpawners = FindObjectsOfType<PanSpawner>();
-                    if (allSpawners.Length == 0)
-                    {
-                        Debug.LogWarning("No PanSpawner found in scene!");
-                    }
-                    else
-                    {
-                        // Pick the closest Spawner to this Pan
-                        PanSpawner nearestSpawner = null;
-                        float minDist = float.MaxValue;
-
-                        foreach (PanSpawner s in allSpawners)
-                        {
-                            float dist = Vector3.Distance(s.transform.position, grabbedObject.transform.position);
-                            if (dist < minDist)
-                            {
-                                minDist = dist;
-                                nearestSpawner = s;
-                            }
-                        }
-
-                        // Call the closest Spawner to spawn a Pan
-                        if (nearestSpawner != null)
-                        {
-                            Debug.Log($"[{name}] grabbed a Pan. Nearest spawner is {nearestSpawner.name} (distance={minDist}). Spawning new Pan...");
-                            nearestSpawner.SpawnNewPan();
-                        }
-                    }
-                }
-
-                if (grabbedObject != null && grabbedObject.CompareTag("Pumpkin"))
-                {
-                    // Find all PumpkinSpawner in the scene
-                    PumpkinSpawner[] allSpawners = FindObjectsOfType<PumpkinSpawner>();
-                    if (allSpawners.Length == 0)
-                    {
-                        Debug.LogWarning("No PumpkinSpawner found in scene!");
-                    }
-                    else
-                    {
-                        // Pick the closest Spawner to this Pumpkin
-                        PumpkinSpawner nearestSpawner = null;
-                        float minDist = float.MaxValue;
-
-                        foreach (PumpkinSpawner s in allSpawners)
-                        {
-                            float dist = Vector3.Distance(s.transform.position, grabbedObject.transform.position);
-                            if (dist < minDist)
-                            {
-                                minDist = dist;
-                                nearestSpawner = s;
-                            }
-                        }
-
-                        // Call the closest Spawner to spawn a Pumpkin
-                        if (nearestSpawner != null)
-                        {
-                            Debug.Log($"[{name}] grabbed a Pumpkin. Nearest spawner is {nearestSpawner.name} (distance={minDist}). Spawning new Pumpkin...");
-                            nearestSpawner.SpawnNewPumpkin();
-                        }
-                    }
-                }
-
-                if (grabbedObject != null)
-                {
-                    if (grabbedObject.CompareTag("Pan"))
-                    {
-                        // Pan-specific transform offset
-                        Vector3 PanOffset = new Vector3(-0.025f, 0, 0);
-                        grabbedObject.transform.position = transform.position + transform.rotation * PanOffset;
-
-                        Quaternion PanOffsetRotation = Quaternion.Euler(0, 180, 0);
-                        grabbedObject.transform.rotation = transform.rotation * PanOffsetRotation;
-                    }
-                    else if (grabbedObject.CompareTag("Pumpkin"))
-                    {
-                        // Pumpkin-specific transform offset
-                        Vector3 PumpkinOffset = new Vector3(-0.035f, 0, 0);
-                        grabbedObject.transform.position = transform.position + transform.rotation * PumpkinOffset;
-
-                        Quaternion PumpkinOffsetRotation = Quaternion.Euler(0, 180, 0);
-                        grabbedObject.transform.rotation = transform.rotation * PumpkinOffsetRotation;
-                    }
-                    else
-                    {
-                        // Default transform for other objects
-                        grabbedObject.transform.position = transform.position;
-                        grabbedObject.transform.rotation = transform.rotation;
-                    }
+                    PumpkinSpawner nearestSpawner = allSpawners.OrderBy(s => Vector3.Distance(s.transform.position, grabbedObject.transform.position)).FirstOrDefault();
+                    nearestSpawner?.SpawnNewPumpkin();
                 }
             }
         }
-        else if (grabAction.action.WasReleasedThisFrame())
+
+        if (grabbedObject != null) // Keep updating position while button is held
         {
-            if (grabbedObject != null)
+            if (grabbedObject.CompareTag("Pan"))
             {
-                var PanThrow = grabbedObject.GetComponent<PanThrow>();
-                if (PanThrow != null)
-                {
-                    PanThrow.OnReleased(transform);
-                }
-
-                grabbedObject.GetComponent<ObjectAccessHandler>().Release();
-
-                // Disable pumpkin shooting script when released
-                if (grabbedObject.CompareTag("Pumpkin"))
-                {
-                    var PumpkinThrow = grabbedObject.GetComponent<PanThrow>();
-                    if (PumpkinThrow != null)
-                    {
-                        PumpkinThrow.OnReleased(transform);
-                    }
-                }
+                Vector3 PanOffset = new Vector3(-0.025f, 0, 0);
+                grabbedObject.transform.position = transform.position + transform.rotation * PanOffset;
+                grabbedObject.transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
             }
-
-            grabbedObject = null;
+            else if (grabbedObject.CompareTag("Pumpkin"))
+            {
+                Vector3 PumpkinOffset = new Vector3(-0.035f, 0, 0);
+                grabbedObject.transform.position = transform.position + transform.rotation * PumpkinOffset;
+                grabbedObject.transform.rotation = transform.rotation * Quaternion.Euler(0, 180, 0);
+            }
+            else
+            {
+                grabbedObject.transform.position = transform.position;
+                grabbedObject.transform.rotation = transform.rotation;
+            }
         }
     }
+    else if (grabAction.action.WasReleasedThisFrame()) // Release when button is released
+    {
+        if (grabbedObject != null)
+        {
+            var panThrow = grabbedObject.GetComponent<PanThrow>();
+            if (panThrow != null)
+            {
+                panThrow.OnReleased(transform);
+            }
+
+            grabbedObject.GetComponent<ObjectAccessHandler>().Release();
+
+            if (grabbedObject.CompareTag("Pumpkin"))
+            {
+                var pumpkinThrow = grabbedObject.GetComponent<PanThrow>();
+                if (pumpkinThrow != null)
+                {
+                    pumpkinThrow.OnReleased(transform);
+                }
+            }
+
+            grabbedObject = null; // Reset grabbed object
+        }
+    }
+}
 
     private void ReparentingGrab()
     {

@@ -28,8 +28,13 @@ public void SpawnNewPumpkin()
         Debug.LogError($"[{name}] SpawnPoint is null, cannot spawn!");
         return;
     }
-     
+    
     GameObject newPumpkin = Instantiate(PumpkinPrefab, spawnPoint.position, spawnPoint.rotation);
+    if (newPumpkin.TryGetComponent<NetworkObject>(out NetworkObject netObj))
+    {
+        netObj.Spawn();  // Ensure it spawns properly over the network
+    }
+
     Debug.Log($"Spawned new pumpkin at {spawnPoint.position}");
 
     Rigidbody rb = newPumpkin.GetComponent<Rigidbody>();
