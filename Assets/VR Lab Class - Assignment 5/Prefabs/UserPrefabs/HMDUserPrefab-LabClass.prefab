@@ -415,6 +415,7 @@ GameObject:
   - component: {fileID: 1821412047879728882}
   - component: {fileID: 7202416083162761210}
   - component: {fileID: 5937289179411182858}
+  - component: {fileID: 6644924027967720947}
   m_Layer: 0
   m_Name: RightHand Controller
   m_TagString: Untagged
@@ -733,6 +734,18 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 5753362011061742477, guid: d86920191e7b0cb41a4a7e1ff8fc9a2e, type: 3}
   handCollider: {fileID: 1783472985837343883}
+--- !u!114 &6644924027967720947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4284957711837968130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a79c4e23d4d4b64bfa5fa9e6671a460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4833818313043802723
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,6 +758,7 @@ GameObject:
   - component: {fileID: 7846704502050818674}
   - component: {fileID: 4949088410318727347}
   - component: {fileID: 334243604804175517}
+  - component: {fileID: 4645769650253121335}
   m_Layer: 0
   m_Name: LeftHand Controller
   m_TagString: Untagged
@@ -1063,6 +1077,18 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: -1890215569660454860, guid: d86920191e7b0cb41a4a7e1ff8fc9a2e, type: 3}
   handCollider: {fileID: 6833764259734985487}
+--- !u!114 &4645769650253121335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4833818313043802723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a79c4e23d4d4b64bfa5fa9e6671a460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7216047632962128736
 GameObject:
   m_ObjectHideFlags: 0
@@ -1353,7 +1379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2624234233
+  GlobalObjectIdHash: 2956674514
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1

@@ -62,8 +62,8 @@ public class RatBehaviour : NetworkBehaviour
         if (!IsServer) return;
         
         // Check if the colliding object is a pan
-        PumpkinThrow pumpkin = collision.gameObject.GetComponent<PumpkinThrow>();
-        if (pumpkin != null)
+        PlateThrow Plate = collision.gameObject.GetComponent<PlateThrow>();
+        if (Plate != null)
         {
             // Calculate impact force
             float impactForce = collision.relativeVelocity.magnitude;
@@ -87,7 +87,7 @@ public class RatBehaviour : NetworkBehaviour
             effect.GetComponent<NetworkObject>()?.Spawn();
         }
         
-        Debug.Log("🐀 Rat was hit by a pan or pumpkin and died!");
+        Debug.Log("🐀 Rat was hit by a pan or Plate and died!");
         
         // Tell the spawner to create a new rat
         if (spawner != null)

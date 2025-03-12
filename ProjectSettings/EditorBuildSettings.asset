@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/VR Lab Class - Assignment 5/Scenes/Intro.unity
+    guid: c576ada10ba903948b5c3ef7f2fa77ee
+  - enabled: 1
     path: Assets/VR Lab Class - Assignment 5/Scenes/VR Lab Class - Assignment 5.unity
     guid: 4662192b1b83ad24d828b0644b2409ed
   m_configObjects:
