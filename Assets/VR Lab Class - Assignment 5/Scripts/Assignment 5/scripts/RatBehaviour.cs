@@ -59,6 +59,22 @@ public class RatBehaviour : NetworkBehaviour
                 DieServerRpc();
             }
         }
+        if (!IsServer) return;
+        
+        // Check if the colliding object is a pan
+        PumpkinThrow pumpkin = collision.gameObject.GetComponent<PumpkinThrow>();
+        if (pumpkin != null)
+        {
+            // Calculate impact force
+            float impactForce = collision.relativeVelocity.magnitude;
+            
+            // Check if the impact is strong enough
+            if (impactForce >= minImpactForce)
+            {
+                // The rat was hit hard enough, kill it
+                DieServerRpc();
+            }
+        }
     }
     
     [ServerRpc(RequireOwnership = false)]
@@ -71,7 +87,7 @@ public class RatBehaviour : NetworkBehaviour
             effect.GetComponent<NetworkObject>()?.Spawn();
         }
         
-        Debug.Log("🐀 Rat was hit by a pan and died!");
+        Debug.Log("🐀 Rat was hit by a pan or pumpkin and died!");
         
         // Tell the spawner to create a new rat
         if (spawner != null)
