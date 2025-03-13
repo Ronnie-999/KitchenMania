@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,11 +9,9 @@ public class RatSpawner : NetworkBehaviour
     public Transform RatSpawnPoint;
     public List<Transform> movementTargets;
     
-    // Add respawn configuration
     public bool autoRespawn = true;
     public float respawnDelay = 2.0f;
     
-    // Optional: limit the number of rats that can be spawned
     public int maxRatsToSpawn = 0;  // 0 means unlimited
     private int ratsSpawned = 0;
 
@@ -22,80 +21,87 @@ public class RatSpawner : NetworkBehaviour
 
         if (IsServer)
         {
+            Debug.Log("[RatSpawner] Spawner spawned on the network. Spawning initial rat...");
             SpawnRat();
+        }
+        else
+        {
+            Debug.LogWarning("[RatSpawner] Not the server, cannot spawn rats.");
         }
     }
 
     public void SpawnRat()
     {
-        // Check if we've reached the maximum number of rats to spawn
+        if (!IsServer)
+        {
+            Debug.LogWarning("[RatSpawner] SpawnRat() called on client. Ignoring.");
+            return;
+        }
+
         if (maxRatsToSpawn > 0 && ratsSpawned >= maxRatsToSpawn)
         {
-            Debug.Log("[RatSpawner] Maximum number of rats reached.");
+            Debug.Log("[RatSpawner] Max rats reached. No more will spawn.");
             return;
         }
-        
-        // Check if ratPrefab is assigned
+
         if (ratPrefab == null)
         {
-            Debug.LogError("[RatSpawner] ratPrefab is NOT assigned in the Inspector!");
+            Debug.LogError("[RatSpawner] ratPrefab is missing! Assign it in the Inspector.");
             return;
         }
 
-        // Check if RatSpawnPoint is assigned
         if (RatSpawnPoint == null)
         {
-            Debug.LogError("[RatSpawner] RatSpawnPoint is NOT assigned in the Inspector!");
+            Debug.LogWarning("[RatSpawner] RatSpawnPoint is missing! Using default Vector3.zero.");
+        }
+
+        Vector3 spawnPosition = RatSpawnPoint != null ? RatSpawnPoint.position : Vector3.zero;
+        Quaternion spawnRotation = RatSpawnPoint != null ? RatSpawnPoint.rotation : Quaternion.identity;
+
+        GameObject rat = Instantiate(ratPrefab, spawnPosition, spawnRotation);
+
+        if (rat == null)
+        {
+            Debug.LogError("[RatSpawner] Failed to instantiate rat!");
             return;
         }
 
-        // Instantiate the rat at the spawn point
-        GameObject rat = Instantiate(ratPrefab, RatSpawnPoint.position, RatSpawnPoint.rotation);
-
-        // Ensure the instantiated rat has RatBehaviour
         RatBehaviour ratBehaviour = rat.GetComponent<RatBehaviour>();
         if (ratBehaviour == null)
         {
-            Debug.LogError("[RatSpawner] RatPrefab is missing the RatBehaviour component!");
+            Debug.LogError("[RatSpawner] RatPrefab is missing RatBehaviour component! Destroying.");
             Destroy(rat);
             return;
         }
 
-        // Assign movement targets to the spawned rat
         ratBehaviour.movementTargets = movementTargets;
-        
-        // Set reference to this spawner
         ratBehaviour.spawner = this;
 
-        // Ensure the instantiated rat has a NetworkObject component
-        NetworkObject networkObject = rat.GetComponent<NetworkObject>();
-        if (networkObject == null)
+        NetworkObject netObj = rat.GetComponent<NetworkObject>();
+        if (netObj == null)
         {
-            Debug.LogError("[RatSpawner] RatPrefab is missing the NetworkObject component!");
+            Debug.LogError("[RatSpawner] RatPrefab is missing NetworkObject component! Destroying.");
             Destroy(rat);
             return;
         }
 
-        // Spawn the rat on the network
-        networkObject.Spawn();
+        netObj.Spawn();
         ratsSpawned++;
-        Debug.Log("[RatSpawner] Rat spawned successfully. Total spawned: " + ratsSpawned);
+        Debug.Log($"[RatSpawner] Rat spawned successfully. Total spawned: {ratsSpawned}");
     }
-    
-    // This method is called when a rat dies
+
     public void RatKilled()
     {
         if (!IsServer) return;
-        
+
         if (autoRespawn)
         {
             Debug.Log("[RatSpawner] Rat killed. Respawning in " + respawnDelay + " seconds.");
             StartCoroutine(RespawnAfterDelay());
         }
     }
-    
-    // Coroutine to handle the respawn delay
-    private System.Collections.IEnumerator RespawnAfterDelay()
+
+    private IEnumerator RespawnAfterDelay()
     {
         yield return new WaitForSeconds(respawnDelay);
         SpawnRat();
