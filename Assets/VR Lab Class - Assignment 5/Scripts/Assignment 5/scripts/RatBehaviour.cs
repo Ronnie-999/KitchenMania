@@ -6,7 +6,7 @@ public class RatBehaviour : NetworkBehaviour
 {
     [HideInInspector] public List<Transform> movementTargets;
     private int currentMovementTargetIdx = -1;
-    
+
     // Reference to the spawner that created this rat
     [HideInInspector] public RatSpawner spawner;
 
@@ -16,7 +16,10 @@ public class RatBehaviour : NetworkBehaviour
     public float rotationSpeed = 180f;
     public float minImpactForce = 2.0f;
     public GameObject deathEffect;
-    
+
+    private static int panHitCount = 0;
+    private static int plateHitCount = 0;
+
     private void Start()
     {
         if (randomizeTargetOrder)
@@ -42,62 +45,76 @@ public class RatBehaviour : NetworkBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
-        if (!IsServer) return;
-        
-        // Check if the colliding object is a pan
-        PanThrow pan = collision.gameObject.GetComponent<PanThrow>();
-        if (pan != null)
-        {
-            // Calculate impact force
-            float impactForce = collision.relativeVelocity.magnitude;
-            
-            // Check if the impact is strong enough
-            if (impactForce >= minImpactForce)
-            {
-                // The rat was hit hard enough, kill it
-                DieServerRpc();
-            }
-        }
-        if (!IsServer) return;
-        
-        // Check if the colliding object is a pan
-        PlateThrow Plate = collision.gameObject.GetComponent<PlateThrow>();
-        if (Plate != null)
-        {
-            // Calculate impact force
-            float impactForce = collision.relativeVelocity.magnitude;
-            
-            // Check if the impact is strong enough
-            if (impactForce >= minImpactForce)
-            {
-                // The rat was hit hard enough, kill it
-                DieServerRpc();
-            }
-        }
-    }
+{
+    if (!IsServer) return;
+
+    float impactForce = collision.relativeVelocity.magnitude;
     
-    [ServerRpc(RequireOwnership = false)]
-    private void DieServerRpc()
+    if (collision.gameObject.TryGetComponent(out PanThrow pan) && impactForce >= minImpactForce)
     {
-        // Spawn death effect if one is assigned
-        if (deathEffect != null)
+        panHitCount++;
+        Debug.Log($"🥄 Pan Hits: {panHitCount}, 🍽 Plate Hits: {plateHitCount}, Score: {CalculateScore()}");
+
+        if (GetComponent<NetworkObject>().IsSpawned) 
         {
-            GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
-            effect.GetComponent<NetworkObject>()?.Spawn();
+            DieServerRpc();
         }
-        
-        Debug.Log("🐀 Rat was hit by a pan or Plate and died!");
-        
-        // Tell the spawner to create a new rat
-        if (spawner != null)
-        {
-            spawner.RatKilled();
-        }
-        
-        // Destroy the rat
-        GetComponent<NetworkObject>().Despawn();
     }
+
+    if (collision.gameObject.TryGetComponent(out PlateThrow plate) && impactForce >= minImpactForce)
+    {
+        plateHitCount++;
+        Debug.Log($"🥄 Pan Hits: {panHitCount}, 🍽 Plate Hits: {plateHitCount}, Score: {CalculateScore()}");
+
+        if (GetComponent<NetworkObject>().IsSpawned) 
+        {
+            DieServerRpc();
+        }
+    }
+}
+
+
+    private int CalculateScore()
+    {
+        return (panHitCount * 1) + (plateHitCount * 2);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+private void DieServerRpc()
+{
+    if (!IsServer) return; // Ensure only the server runs this
+
+    NetworkObject networkObject = GetComponent<NetworkObject>();
+    
+    if (networkObject == null || !networkObject.IsSpawned)
+    {
+        Debug.LogWarning("⚠️ Attempted to call DieServerRpc on an unspawned NetworkObject!");
+        return;
+    }
+
+    // Spawn death effect if assigned
+    if (deathEffect != null)
+    {
+        GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
+        NetworkObject effectNetworkObject = effect.GetComponent<NetworkObject>();
+        if (effectNetworkObject != null)
+        {
+            effectNetworkObject.Spawn();
+        }
+    }
+
+    Debug.Log("🐀 Rat was hit and died!");
+
+    // Tell the spawner to create a new rat
+    if (spawner != null)
+    {
+        spawner.RatKilled();
+    }
+
+    // Despawn the rat safely
+    networkObject.Despawn();
+    Destroy(gameObject, 0.1f);
+}
 
     private void UpdateTarget()
     {

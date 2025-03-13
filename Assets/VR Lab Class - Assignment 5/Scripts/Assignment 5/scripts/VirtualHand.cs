@@ -129,12 +129,19 @@ public class VirtualHand : MonoBehaviour
                 if (grabbedObject != null && grabbedObject.CompareTag("Plate"))
                 {
                     PlateSpawner[] allSpawners = FindObjectsOfType<PlateSpawner>();
-                    if (allSpawners.Length > 0)
-                    {
-                        PlateSpawner nearestSpawner = allSpawners.OrderBy(s => Vector3.Distance(s.transform.position, grabbedObject.transform.position)).FirstOrDefault();
-                        nearestSpawner?.SpawnNewPlate();
-                    }
+                if (allSpawners.Length > 0)
+                {
+                    PlateSpawner nearestSpawner = allSpawners
+                    .OrderBy(s => Vector3.Distance(s.transform.position, grabbedObject.transform.position))
+                    .FirstOrDefault();
+
+                if (nearestSpawner != null)
+                {
+                    nearestSpawner.RequestSpawnNewPlateServerRpc(); // ✅ Calls the fixed function
                 }
+            }
+        }
+
 
                 // Ensure the plate is kinematic when grabbed to avoid unwanted physics interactions
                 Rigidbody grabbedRb = grabbedObject?.GetComponent<Rigidbody>();
@@ -264,4 +271,3 @@ public class VirtualHand : MonoBehaviour
 
     #endregion
 }
-

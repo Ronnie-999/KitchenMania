@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
 
-public class PlateSpawner : MonoBehaviour
+public class PlateSpawner : NetworkBehaviour // Change to NetworkBehaviour
 {
     public GameObject PlatePrefab;
     public Transform spawnPoint;
@@ -14,6 +12,14 @@ public class PlateSpawner : MonoBehaviour
         {
             spawnPoint = this.transform;
         }
+    }
+
+    [ServerRpc]
+    public void RequestSpawnNewPlateServerRpc()
+    {
+        if (!IsServer) return; // Ensure this check works properly
+
+        SpawnNewPlate();
     }
 
     public void SpawnNewPlate()
@@ -31,18 +37,16 @@ public class PlateSpawner : MonoBehaviour
 
         GameObject newPlate = Instantiate(PlatePrefab, spawnPoint.position, spawnPoint.rotation);
 
-        // Ensure the object has a NetworkObject component
         NetworkObject networkObject = newPlate.GetComponent<NetworkObject>();
         if (networkObject != null)
         {
-            networkObject.Spawn();  // Spawn the object over the network
+            networkObject.Spawn();
         }
         else
         {
             Debug.LogError("Spawned Plate does not have a NetworkObject component!");
         }
 
-        // Make the new Pan completely still
         Rigidbody rb = newPlate.GetComponent<Rigidbody>();
         if (rb != null)
         {
